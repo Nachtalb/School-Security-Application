@@ -6,9 +6,23 @@ use warnings;
 sub reply {
     my $class  = shift;
     my $option = shift;
+    my $secure = '';
 
-    return `ls $option`;
-
+    $commando = "ls $option";
+    Fulla::Werchzeug->get_logger()->debug("Test: " . $commando);
+    
+    given ($option) {
+        $secure = '-l' when /^-l$/;
+        $secure = '-a' when /^-a$/;
+        $secure = '-h' when /^-h$/;
+        default { say 'not allowed'; exit 1; }
+    }
+    
+    $commando = "ls $secure";
+    
+    Fulla::Werchzeug->get_logger()->debug("Test: " . $commando);
+    
+    return `$commando`;
 }
 
 1;
